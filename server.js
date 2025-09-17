@@ -17,6 +17,11 @@ const server = http.createServer((req, res) => {
       </head>
       <body>
         <div class="form-container">
+          <div class="logo-container">
+            <img src="/logo.png" alt="Logo PUC" style="max-width: 150px; margin-bottom: 10px;" />
+            <p class="frase-logo">A melhor experiência em formulários PUC Style!</p>
+          </div>
+
           <h1>Contato</h1>
           <p class="subtitle">Preencha os dados abaixo</p>
           <form action="/enviar" method="post">
@@ -121,6 +126,15 @@ const server = http.createServer((req, res) => {
         return res.end('Erro ao carregar o CSS');
       }
       res.writeHead(200, { 'Content-Type': 'text/css' });
+      res.end(data);
+    });
+  } else if (req.method === 'GET' && req.url === '/logo.png') {
+    fs.readFile(path.join(__dirname, 'logo.png'), (err, data) => {
+      if (err) {
+        res.writeHead(404);
+        return res.end('Logo não encontrada');
+      }
+      res.writeHead(200, { 'Content-Type': 'image/png' });
       res.end(data);
     });
   } else {
