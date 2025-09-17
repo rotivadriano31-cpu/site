@@ -12,14 +12,14 @@ const server = http.createServer((req, res) => {
       <html lang="pt-BR">
       <head>
         <meta charset="UTF-8" />
-        <title>Formulário - PUC Style</title>
+        <title>Formulário - PUC </title>
         <link rel="stylesheet" href="/style.css" />
       </head>
       <body>
         <div class="form-container">
           <div class="logo-container">
             <img src="/logo.png" alt="Logo PUC" style="max-width: 150px; margin-bottom: 10px;" />
-            <p class="frase-logo">A melhor experiência em formulários PUC Style!</p>
+            <p class="frase-logo">Preencha os dados abaixo!</p>
           </div>
 
           <h1>Contato</h1>
@@ -146,3 +146,4 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
