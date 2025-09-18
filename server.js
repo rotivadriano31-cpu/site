@@ -1,4 +1,6 @@
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 const PORT = 3000;
 
@@ -8,63 +10,7 @@ const html = `
 <head>
   <meta charset="UTF-8" />
   <title>PUC Minas - Simulação</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
-    header {
-      background-color: #002f6c;
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-    nav ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-    nav li {
-      margin-left: 20px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-    .banner {
-      background: linear-gradient(to right, #004080, #002f6c);
-      height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 30px;
-      font-weight: bold;
-    }
-    .content {
-      padding: 40px;
-      background-color: white;
-    }
-    .footer {
-      background-color: #002f6c;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-  </style>
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <header>
@@ -98,9 +44,25 @@ const html = `
 
 const server = http.createServer((req, res) => {
   if (req.method === 'GET' && req.url === '/') {
+    // Página principal
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(html);
+
+  } else if (req.method === 'GET' && req.url === '/style.css') {
+    // Servir CSS
+    const cssPath = path.join(__dirname, 'style.css');
+    fs.readFile(cssPath, (err, data) => {
+      if (err) {
+        res.writeHead(500);
+        res.end('Erro ao carregar CSS');
+        return;
+      }
+      res.writeHead(200, { 'Content-Type': 'text/css' });
+      res.end(data);
+    });
+
   } else {
+    // 404 para outros caminhos
     res.writeHead(404);
     res.end('Página não encontrada');
   }
