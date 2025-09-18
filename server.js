@@ -5,6 +5,7 @@ const path = require('path');
 const PORT = 3000;
 
 const server = http.createServer((req, res) => {
+  // Página inicial com apenas um botão
   if (req.method === 'GET' && req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(`
@@ -12,38 +13,40 @@ const server = http.createServer((req, res) => {
       <html lang="pt-BR">
       <head>
         <meta charset="UTF-8" />
-        <title>Formulário - PUC </title>
+        <title>Formulário - PUC</title>
         <link rel="stylesheet" href="/style.css" />
       </head>
       <body>
         <div class="form-container">
           <div class="logo-container">
             <img src="/logo.png" alt="Logo PUC" style="max-width: 150px; margin-bottom: 10px;" />
-            <p class="frase-logo">Preencha os dados abaixo!</p>
+            <p class="frase-logo">Clique no botão abaixo para preencher seu endereço</p>
           </div>
 
-          <h1>Contato</h1>
-          <p class="subtitle">Preencha os dados abaixo</p>
-          <form action="/enviar" method="post">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="telefone">Telefone:</label>
-            <input type="tel" id="telefone" name="telefone">
-
-            <button type="submit">Enviar</button>
-          </form>
-
-          <button type="button" onclick="window.location.href='/endereco'" style="background-color: #f7b500; color: #002f6c; border: none; padding: 12px; width: 100%; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px;">
+          <button 
+            type="button" 
+            onclick="window.location.href='/endereco'" 
+            style="
+              background-color: #f7b500; 
+              color: #002f6c; 
+              border: none; 
+              padding: 15px; 
+              width: 100%; 
+              font-size: 18px; 
+              font-weight: bold; 
+              border-radius: 5px; 
+              cursor: pointer; 
+              margin-top: 20px;
+            "
+          >
             Preencher Endereço
           </button>
         </div>
       </body>
       </html>
     `);
+
+  // Página de endereço
   } else if (req.method === 'GET' && req.url === '/endereco') {
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.end(`
@@ -51,7 +54,7 @@ const server = http.createServer((req, res) => {
       <html lang="pt-BR">
       <head>
         <meta charset="UTF-8" />
-        <title>Endereço - PUC Style</title>
+        <title>Endereço - PUC</title>
         <link rel="stylesheet" href="/style.css" />
       </head>
       <body>
@@ -75,25 +78,8 @@ const server = http.createServer((req, res) => {
       </body>
       </html>
     `);
-  } else if (req.method === 'POST' && req.url === '/enviar') {
-    let body = '';
-    req.on('data', chunk => {
-      body += chunk.toString();
-    });
-    req.on('end', () => {
-      const params = new URLSearchParams(body);
-      const nome = params.get('nome');
-      const email = params.get('email');
-      const telefone = params.get('telefone');
 
-      console.log('Dados recebidos:');
-      console.log('Nome:', nome);
-      console.log('Email:', email);
-      console.log('Telefone:', telefone);
-
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(`<h2>Dados recebidos com sucesso!</h2><a href="/">Voltar</a>`);
-    });
+  // Processamento do formulário de endereço
   } else if (req.method === 'POST' && req.url === '/salvar-endereco') {
     let body = '';
     req.on('data', chunk => {
@@ -119,6 +105,8 @@ const server = http.createServer((req, res) => {
         <a href="/">Voltar para a página inicial</a>
       `);
     });
+
+  // Servir o arquivo CSS
   } else if (req.method === 'GET' && req.url === '/style.css') {
     fs.readFile(path.join(__dirname, 'style.css'), (err, data) => {
       if (err) {
@@ -128,6 +116,8 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/css' });
       res.end(data);
     });
+
+  // Servir o logo
   } else if (req.method === 'GET' && req.url === '/logo.png') {
     fs.readFile(path.join(__dirname, 'logo.png'), (err, data) => {
       if (err) {
@@ -137,6 +127,8 @@ const server = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'image/png' });
       res.end(data);
     });
+
+  // Rota não encontrada
   } else {
     res.writeHead(404);
     res.end('Página não encontrada');
@@ -146,4 +138,5 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
 
